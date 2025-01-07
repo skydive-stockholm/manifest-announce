@@ -3,11 +3,15 @@ import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-id
 import { Polly, SynthesizeSpeechInput, VoiceId } from "@aws-sdk/client-polly"
 import { getSynthesizeSpeechUrl } from "@aws-sdk/polly-request-presigner"
 
+/**
+ * TODO: Convert polly.ts to class & add Vue Composable
+ */
+
 // Get environment variables
 let settings = window.localStorage.getItem("settings") || "{}"
 let item = JSON.parse(settings)
 
-const pollyIdentityPoolId = item.core.aws_polly_key || ""
+const pollyIdentityPoolId = item?.core?.aws_polly_key || ""
 const pollyRegion = pollyIdentityPoolId.split(":")[0]
 
 type PollyAudioParams = {

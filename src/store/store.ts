@@ -8,8 +8,8 @@ export const useGlobalState = createGlobalState(() => {
             definedGates: [],
             selectedGate: null,
             core: {
-                skywin_endpoint: null,
-                aws_polly_key: null,
+                skywin_endpoint: "https://demo.skywin.se",
+                aws_polly_key: "",
             },
         },
         window.localStorage,
