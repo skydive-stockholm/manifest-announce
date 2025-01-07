@@ -1,0 +1,37 @@
+{
+  "name": "manifest-announcements",
+  "author": "Robin Nilsson",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity": "^3.410.0",
+    "@aws-sdk/client-polly": "^3.410.0",
+    "@aws-sdk/credential-provider-cognito-identity": "^3.410.0",
+    "@aws-sdk/node-http-handler": "^3.374.0",
+    "@aws-sdk/polly-request-presigner": "^3.410.0",
+    "@headlessui/vue": "^1.7.23",
+    "@heroicons/vue": "^2.2.0",
+    "axios": "^1.7.7",
+    "@vueuse/core": "^11.3.0",
+    "dayjs": "^1.11.13",
+    "floating-vue": "^5.2.2",
+    "lodash": "^4.17.21",
+    "vue": "^3.5.12"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.15",
+    "typescript": "~5.6.2",
+    "vite": "^5.4.10",
+    "vue-tsc": "^2.1.8"
+  }
+}
