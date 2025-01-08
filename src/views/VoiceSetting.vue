@@ -102,7 +102,7 @@ function playPreview(url: string): void {
 
         <div class="mt-3">
             <BaseSelect v-model="state.voiceService" label="Voice service">
-                <option value="">Native browser</option>
+                <option value="native">Native browser</option>
                 <option value="polly">AWS Polly</option>
                 <option value="elevenlabs">Elevenlabs</option>
             </BaseSelect>

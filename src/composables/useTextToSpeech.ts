@@ -37,9 +37,10 @@ export function useTextToSpeech(config: TextToSpeechConfig = {}) {
         const pollyRegion = pollyKey.split(":")[0]
         const elevenLabsApiKey = state.value.core.elevenlabs_key
 
-        const voiceSetting =
-            state.value.voiceServices[state.value.voiceService].voice
-        const voice = config.voice || voiceSetting
+        const voiceService = state.value.voiceService || "native"
+        const voiceServices = state.value.voiceServices
+
+        const voice = config.voice || voiceServices[voiceService].voice
 
         // Initialize the services with the config
         const services = {
@@ -59,8 +60,7 @@ export function useTextToSpeech(config: TextToSpeechConfig = {}) {
             }),
         }
 
-        const currentService =
-            config.service || state.value.voiceService || "native"
+        const currentService = config.service || voiceService || "native"
 
         try {
             isPlayingSound.value = true

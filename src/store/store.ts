@@ -17,7 +17,7 @@ export const useGlobalState = createGlobalState(() => {
                 aws_polly_key: "",
                 elevenlabs_key: "",
             },
-            voiceService: "" as VoiceServiceType,
+            voiceService: "native" as VoiceServiceType,
             voiceServices: {
                 elevenlabs: {
                     voice: "",
