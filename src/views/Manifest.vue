@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onUnmounted, ref } from "vue"
-import { isPlayingSound, play } from "../utils/sound.ts"
 import BaseButton from "../components/BaseButton.vue"
 import AlertComponent from "../components/AlertComponent.vue"
 import { useSkyview } from "../composables/useSkyview.ts"
@@ -10,6 +9,7 @@ import { useLocalStorage } from "@vueuse/core"
 import GateSelect from "./GateSelect.vue"
 import SettingsDialog from "./SettingsDialog.vue"
 import { useGlobalState } from "../store/store.ts"
+import { useTextToSpeech } from "../composables/useTextToSpeech.ts"
 
 const state = useGlobalState()
 const SkyviewService = useSkyview()
@@ -17,48 +17,54 @@ const skyview = SkyviewService.skyview
 
 const readNames = useLocalStorage("readNames", true)
 
+const { speak, isPlayingSound } = useTextToSpeech()
+
 const announce10MinuteCall = () => {
     const gate = state.value.selectedGate
-    return play(
-        `This is a 10 minute call. Time to go to loading area. ${gate ? gate + " gate." : ""} 10 minutes.`,
-        true
-    )
+    const text = `This is a 10 minute call. Time to go to loading area. ${gate ? gate + " gate." : ""} 10 minutes.`
+
+    return speak(text)
 }
 
 const announce15MinuteCall = async () => {
     const nextLoad = skyview.value.getNextLoad()
-
-    if (!nextLoad) {
-        return
-    }
-
-    let msg = `This is a 15 minute call for load number ${nextLoad.loadNo}. `
-
-    if (readNames.value) {
-        const names = nextLoad.stringifyJumpers()
-        msg += `On this load we have; ${names}. `
-    }
-
     const fellingLeader = nextLoad?.fellingLeader()
 
-    if (fellingLeader) {
-        msg += `Load master is ${fellingLeader.name}. `
+    let msg = `This is a 15 minute call`
+
+    if (nextLoad) {
+        msg += ` for load ${nextLoad.loadNo}.. `
+    } else {
+        msg += ". "
+    }
+
+    if (nextLoad) {
+        if (readNames.value) {
+            const names = nextLoad.stringifyJumpers()
+            msg += `On this load we have; ${names}. `
+        }
+
+        if (fellingLeader) {
+            msg += `Load master is ${fellingLeader.name}. `
+        }
     }
 
     if (state.value.selectedGate) {
-        msg += `${state.value.selectedGate} gate... `
+        msg += `${state.value.selectedGate} gate. `
     }
 
-    if (readNames.value || fellingLeader) {
+    if (nextLoad && (readNames.value || fellingLeader)) {
         msg += "15 minutes. "
     }
 
-    await play(msg, true)
+    await speak(msg, {
+        bellSound: false,
+    })
 }
 
 const autoCall = ref(false)
-const lastAnnounced10MinuteLoad = ref(null)
-const lastAnnounced15MinuteLoad = ref(null)
+const lastAnnounced10MinuteLoad = ref<number>()
+const lastAnnounced15MinuteLoad = ref<number>()
 const autoLoadLoop = async () => {
     if (!autoCall.value) return
 
@@ -91,8 +97,8 @@ const loop = setInterval(autoLoadLoop, 2 * 1000)
 
 onUnmounted(() => clearInterval(loop))
 
-const settingsDialog = ref(null)
-const settings = ref(null)
+const settingsDialog = ref()
+const settings = ref()
 </script>
 
 <template>
@@ -143,6 +149,7 @@ const settings = ref(null)
                         </label>
 
                         <button
+                            v-if="settingsDialog"
                             class="text-blue-500 hover:text-blue-700"
                             @click="settingsDialog.reveal()"
                         >
@@ -242,7 +249,9 @@ const settings = ref(null)
                             <template
                                 v-if="skyview.getNextLoad().fellingLeader()"
                             >
-                                {{ skyview.getNextLoad().fellingLeader().name }}
+                                {{
+                                    skyview.getNextLoad().fellingLeader()?.name
+                                }}
                             </template>
                             <template v-else> N/A</template>
                         </div>
@@ -292,7 +301,9 @@ const settings = ref(null)
                         id="minutes-10"
                         tabindex="-1"
                         :disabled="isPlayingSound"
-                        @dblclick="play(`Standby. Standby.`, true)"
+                        @dblclick="
+                            speak(`Standby. Standby.`, { bellSound: true })
+                        "
                     >
                         Standby
                     </BaseButton>

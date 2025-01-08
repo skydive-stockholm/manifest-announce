@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref } from "vue"
-import { isPlayingSound, play } from "../utils/sound.ts"
+import { useTextToSpeech } from "../composables/useTextToSpeech.ts"
+import { useLocalStorage } from "@vueuse/core"
 
-const customMessageBellSound = ref(true)
-const customMessage = ref("")
+const customMessageBellSound = useLocalStorage("customMessageBellSound", true)
+const customMessage = useLocalStorage("customMessage", "")
+
+const { speak, isPlayingSound } = useTextToSpeech()
 </script>
 
 <template>
@@ -19,7 +21,7 @@ const customMessage = ref("")
 
             <textarea
                 rows="4"
-                @keydown.meta.enter.exact="play(customMessage)"
+                @keydown.meta.enter.exact="speak(customMessage)"
                 v-model="customMessage"
                 class="rounded border-0 p-2 bg-gray-200 dark:bg-gray-800 dark:text-gray-200 w-full"
                 id="custom-message"
@@ -37,7 +39,9 @@ const customMessage = ref("")
                 }"
                 :disabled="isPlayingSound"
                 id="custom-message__submit"
-                @click="play(customMessage, customMessageBellSound)"
+                @click="
+                    speak(customMessage, { bellSound: customMessageBellSound })
+                "
             >
                 Play
             </button>

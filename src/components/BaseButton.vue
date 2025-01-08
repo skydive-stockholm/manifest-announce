@@ -13,7 +13,7 @@ import { computed, Component as VueComponent } from "vue"
 
 type ButtonColor = "blue" | "green" | "red" | "yellow" | "gray" | "orange"
 
-type ButtonSize = "small" | "medium" | "large"
+type ButtonSize = "tiny" | "small" | "medium" | "large"
 
 type ButtonProps = {
     icon?: VueComponent | null
@@ -29,6 +29,8 @@ const props = withDefaults(defineProps<ButtonProps>(), {
 
 const sizeClasses = computed((): string => {
     switch (props.size) {
+        case "tiny":
+            return "text-xs py-1 px-2"
         case "small":
             return "text-sm py-2 px-3"
         case "large":

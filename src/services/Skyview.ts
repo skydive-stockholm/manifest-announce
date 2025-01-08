@@ -330,17 +330,17 @@ export default class Skyview {
         return this.loads.filter((load) => load.loadStatus === status)
     }
 
-    getNextLoad(): Load | undefined {
+    getNextLoad(): Load {
         return this.getPlannedLoads().sort(
             (a, b) =>
                 new Date(a.liftTime).getTime() - new Date(b.liftTime).getTime()
         )[0]
     }
 
-    getNextLoadMinutes(): number | null {
+    getNextLoadMinutes(): number {
         const nextLoad = this.getNextLoad()
 
-        if (!nextLoad) return null
+        if (!nextLoad) return 0
 
         return getMinutesDiff(new Date(), new Date(nextLoad.liftedAt))
     }

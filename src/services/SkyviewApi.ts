@@ -14,6 +14,10 @@ export class SkyviewApi {
     }
 
     async get() {
+        if (!this.apiUrl) {
+            return
+        }
+
         const res = await axios.get(`${this.apiUrl}/api/v1/skyview.json`)
 
         return await res.data

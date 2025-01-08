@@ -2,7 +2,8 @@
 import { useConfirmDialog } from "@vueuse/core"
 import BaseButton from "../components/BaseButton.vue"
 import GateSetting from "./GateSetting.vue"
-import APISetting from "./CoreSetting.vue"
+import VoiceSetting from "./VoiceSetting.vue"
+import CoreSetting from "./CoreSetting.vue"
 
 const { isRevealed, reveal, confirm, cancel } = useConfirmDialog()
 
@@ -73,10 +74,13 @@ defineExpose({ reveal })
 
                             <hr class="my-3" />
 
-                            <form @submit="confirm" class="space-y-3">
-                                <GateSetting />
-                                <hr />
-                                <APISetting />
+                            <form
+                                @submit="confirm"
+                                class="divide-y dark:divide-gray-600 divide-gray-300"
+                            >
+                                <GateSetting class="py-3" />
+                                <CoreSetting class="py-3" />
+                                <VoiceSetting class="py-3" />
                             </form>
                         </div>
                     </div>
