@@ -23,7 +23,7 @@ const announce10MinuteCall = () => {
     const gate = state.value.selectedGate
     const text = `This is a 10 minute call. Time to go to loading area. ${gate ? gate + " gate." : ""} 10 minutes.`
 
-    return speak(text)
+    return speak(text, { bellSound: true })
 }
 
 const announce15MinuteCall = async () => {
@@ -58,7 +58,7 @@ const announce15MinuteCall = async () => {
     }
 
     await speak(msg, {
-        bellSound: false,
+        bellSound: true,
     })
 }
 
