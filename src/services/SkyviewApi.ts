@@ -20,8 +20,12 @@ export class SkyviewApi {
             return
         }
 
+        const now = new Date()
+        const jumpDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`
+
         const res = await axios.get(`${this.apiUrl}/api/v1/skyview.json`, {
             auth: this.auth,
+            params: { jumpDate },
         })
 
         return await res.data
