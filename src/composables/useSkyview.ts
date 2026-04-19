@@ -6,7 +6,15 @@ import { useGlobalState } from "../store/store.ts"
 export const useSkyview = () => {
     const state = useGlobalState()
 
-    const skyViewApi = new SkyviewApi(state.value.core.skywin_endpoint)
+    const skyViewApi = new SkyviewApi(
+        state.value.core.skywin_endpoint,
+        state.value.core.skywin_basic_auth_enabled
+            ? {
+                  username: state.value.core.skywin_username,
+                  password: state.value.core.skywin_password,
+              }
+            : undefined
+    )
     const skyview = ref<Skyview>(new Skyview())
 
     const fetchSkyview = async (): Promise<Skyview> => {

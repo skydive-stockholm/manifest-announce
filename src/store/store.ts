@@ -14,6 +14,9 @@ export const useGlobalState = createGlobalState(() => {
             selectedGate: null,
             core: {
                 skywin_endpoint: "https://demo.skywin.se",
+                skywin_basic_auth_enabled: false,
+                skywin_username: "",
+                skywin_password: "",
                 aws_polly_key: "",
                 elevenlabs_key: "",
             },

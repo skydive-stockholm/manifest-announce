@@ -1,10 +1,12 @@
-import axios from "axios"
+import axios, { AxiosBasicCredentials } from "axios"
 
 export class SkyviewApi {
     apiUrl: string
+    auth?: AxiosBasicCredentials
 
-    constructor(apiUrl: string) {
+    constructor(apiUrl: string, auth?: AxiosBasicCredentials) {
         this.apiUrl = apiUrl
+        this.auth = auth
 
         if (this.apiUrl.includes("demo.skywin.se")) {
             const CORS_PROXY = "https://corsproxy.io/?url="
@@ -18,7 +20,9 @@ export class SkyviewApi {
             return
         }
 
-        const res = await axios.get(`${this.apiUrl}/api/v1/skyview.json`)
+        const res = await axios.get(`${this.apiUrl}/api/v1/skyview.json`, {
+            auth: this.auth,
+        })
 
         return await res.data
     }
